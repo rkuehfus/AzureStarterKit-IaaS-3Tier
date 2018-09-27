@@ -364,7 +364,7 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks',  parameters('ManvNetName'))]"
+                "[resourceId(parameters('ManResourceGroupName'),'Microsoft.Network/virtualNetworks',  parameters('ManvNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
