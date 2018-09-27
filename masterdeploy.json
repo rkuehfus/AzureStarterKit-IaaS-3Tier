@@ -65,7 +65,8 @@
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {
-                    "HubResourceGroupName":{"value": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[3])]"}
+                    "HubResourceGroupName":{"value": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[3])]"},
+                    "ManResourceGroupName":{"value": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0])]"}
                   }
             }
         }
