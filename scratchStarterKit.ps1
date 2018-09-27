@@ -60,6 +60,10 @@ New-AzureRmDeployment `
   }
 
 
+  #vars
+  "ManvNettoHubvNetPeeringName": "[concat(parameters('ManvNetName'), '-', parameters('HubvNetName'))]",
+  "HubvNettoManvNetPeeringName": "[concat(parameters('HubvNetName'), '-', parameters('ManvNetName'))]"
+
   #from hub deployment
   {
     "apiVersion": "2016-06-01",

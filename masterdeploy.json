@@ -37,7 +37,11 @@
             "defaultValue": "eastus"
         }
     },
-    "variables": {},
+    "variables": {
+        "ManResourceGroupName": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0])]",
+        "HubResourceGroupName": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[3])]"
+
+    },
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
@@ -54,22 +58,43 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "networkDeployment",
-            "resourceGroup": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0])]",
+            "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0]))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('ManResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/networkdeploy.json'))]",
                     "contentVersion":"1.0.0.0"
-                 },
-                 "parameters": {
-                    "HubResourceGroupName":{"value": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[3])]"},
-                    "ManResourceGroupName":{"value": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0])]"}
-                  }
+                 }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "HubNetworkdeployment",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('HubResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('HubResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/hubnetworkdeploy.json'))]",
+                    "contentVersion":"1.0.0.0"
+                 }
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "ManResourceGroupName":{
+            "type": "string",
+            "value": "[variables('ManResourceGroupName')]"
+        },
+        "HubResourceGroupName":{
+            "type": "string",
+            "value": "[variables('HubResourceGroupName')]"
+        }
+    }
 }
