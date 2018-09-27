@@ -54,9 +54,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "networkDeployment",
-            "resourceGroup": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[copyIndex(0)])]",
+            "resourceGroup": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0])]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[copyIndex(0)]))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0]))]"
             ],
             "properties": {
                 "mode": "Incremental",
