@@ -342,7 +342,7 @@
         {
             "apiVersion": "2016-06-01",
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "name": "[variables('ManvNettoHubvNetPeeringName')]",
+            "name": "[concat(parameters('ManvNetName'), '/','ManvNettoHubvNetPeeringName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
