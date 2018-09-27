@@ -8,7 +8,7 @@ Get-AzureRmResourceProvider -Location eastus -ListAvailable | ft ProviderNamespa
 
 
 #Step 1: Create Key Vault and set flag to enable for template deployment with ARM
-$rgname="NIC-poc1"
+$rgname=""
 New-AzureRmResourceGroup -Name $rgname -Location eastus 
 $rg = Get-AzureRmResourceGroup -Name $rgname
 $manName = 'poc'
@@ -24,7 +24,7 @@ Get-AzureRmKeyVault -VaultName $manVaultName | Select-Object VaultName, Resource
 #az keyvault secret show --name ubuntuDefaultPassword --vault-name robAsHackVault --query value --output tsv
 
 #Change the parameters file and redeploy
-$rgname="NIC-poc4"
+$rgname=""
 New-AzureRmResourceGroup -Name $rgname -Location eastus 
 $rg = Get-AzureRmResourceGroup -Name $rgname
 
@@ -51,7 +51,7 @@ New-AzureRmDeployment `
   -storagePrefix demo `
   -rgLocation eastus
 
-  $rgNames = @("armwwt1","armwwt2","armwwt3")
+  $rgNames = @("arm","arm2","arm3")
 
 
   $rgs = Get-AzureRmResourceGroup -Name demo*
