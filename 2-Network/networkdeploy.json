@@ -15,6 +15,12 @@
             "metadata": {
                 "description": "Name for Hub vNet"
             }
+        },
+        "HubResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": ""
+            }
         }
     },
     "variables": {
@@ -48,7 +54,6 @@
             "DBsubnetPrefix": "10.1.3.0/24",
             "DBnsgName": "DBnsg"
         },
-    
         "ManvNettoHubvNetPeeringName": "[concat(parameters('ManvNetName'), '-', parameters('HubvNetName'))]",
         "HubvNettoManvNetPeeringName": "[concat(parameters('HubvNetName'), '-', parameters('ManvNetName'))]"
     },
@@ -269,7 +274,6 @@
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').outAzFWnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').commonnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').helpernsgName)]"
-
             ],
             "properties": {
                 "addressSpace": {
@@ -326,279 +330,299 @@
                 ]
             },
             "resources": [
-                {
-                    "apiVersion": "2016-06-01",
-                    "type": "virtualNetworkPeerings",
-                    "name": "[variables('ManvNettoHubvNetPeeringName')]",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
-                        "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
-                    ],
-                    "comments": "This is the peering from ManvNet  to HubvNet ",
-                    "properties": {
-                        "allowVirtualNetworkAccess": "true",
-                        "allowForwardedTraffic": "false",
-                        "allowGatewayTransit": "false",
-                        "useRemoteGateways": "false",
-                        "remoteVirtualNetwork": {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('HubvNetName'))]"
-                        }
-                    }
-                }
+                
             ]
         },
         {
-            "apiVersion": "2017-06-01",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('HubvNet').WebnsgName]",
-            "location": "[resourceGroup().location]",
+            "apiVersion": "2017-05-10",
+            "name": "nestedHubNetworkTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('HubResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks',  parameters('ManvNetName'))]"
+            ],
             "properties": {
-                "securityRules": [
-                    {
-                        "name": "web_rule",
-                        "properties": {
-                            "description": "Allow WEB",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "80",
-                            "sourceAddressPrefix": "Internet",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 101,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
-                        "name": "azurestorageout",
-                        "properties": {
-                            "provisioningState": "Succeeded",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "Storage",
-                            "access": "Allow",
-                            "priority": 120,
-                            "direction": "Outbound",
-                            "sourcePortRanges": [],
-                            "destinationPortRanges": [
-                                "443"
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "apiVersion": "2017-06-01",
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "name": "[variables('HubvNet').WebnsgName]",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "web_rule",
+                                        "properties": {
+                                            "description": "Allow WEB",
+                                            "protocol": "Tcp",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "80",
+                                            "sourceAddressPrefix": "Internet",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 101,
+                                            "direction": "Inbound"
+                                        }
+                                    },
+                                    {
+                                        "name": "azurestorageout",
+                                        "properties": {
+                                            "provisioningState": "Succeeded",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "Storage",
+                                            "access": "Allow",
+                                            "priority": 120,
+                                            "direction": "Outbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [
+                                                "443"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "Block_Internet",
+                                        "properties": {
+                                            "description": "Block Internet",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "*",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "Internet",
+                                            "access": "Deny",
+                                            "priority": 200,
+                                            "direction": "Outbound"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "apiVersion": "2017-06-01",
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "name": "[variables('HubvNet').AppnsgName]",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "web_rule",
+                                        "properties": {
+                                            "description": "Allow WEB",
+                                            "protocol": "Tcp",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "80",
+                                            "sourceAddressPrefix": "Internet",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 101,
+                                            "direction": "Inbound"
+                                        }
+                                    },
+                                    {
+                                        "name": "azurestorageout",
+                                        "properties": {
+                                            "provisioningState": "Succeeded",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "Storage",
+                                            "access": "Allow",
+                                            "priority": 120,
+                                            "direction": "Outbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [
+                                                "443",
+                                                "80"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "Block_Internet",
+                                        "properties": {
+                                            "description": "Block Internet",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "*",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "Internet",
+                                            "access": "Deny",
+                                            "priority": 200,
+                                            "direction": "Outbound"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "apiVersion": "2017-06-01",
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "name": "[variables('HubvNet').DBnsgName]",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "web_rule",
+                                        "properties": {
+                                            "description": "Allow WEB",
+                                            "protocol": "Tcp",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "80",
+                                            "sourceAddressPrefix": "Internet",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 101,
+                                            "direction": "Inbound"
+                                        }
+                                    },
+                                    {
+                                        "name": "Block_FE",
+                                        "properties": {
+                                            "description": "Block Web Subnet",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "*",
+                                            "sourceAddressPrefix": "10.1.1.0/24",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Deny",
+                                            "priority": 190,
+                                            "direction": "Inbound"
+                                        }
+                                    },
+                                    {
+                                        "name": "azurestorageout",
+                                        "properties": {
+                                            "provisioningState": "Succeeded",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "Storage",
+                                            "access": "Allow",
+                                            "priority": 120,
+                                            "direction": "Outbound",
+                                            "sourcePortRanges": [],
+                                            "destinationPortRanges": [
+                                                "443",
+                                                "80"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "Block_Internet",
+                                        "properties": {
+                                            "description": "Block Internet",
+                                            "protocol": "*",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "*",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "Internet",
+                                            "access": "Deny",
+                                            "priority": 200,
+                                            "direction": "Outbound"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "apiVersion": "2016-03-30",
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "name": "[parameters('HubvNetName')]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').WebnsgName)]",
+                                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').AppnsgName)]",
+                                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').DBnsgName)]"
+                            ],
+                            "comments": "This is the second vNet",
+                            "properties": {
+                                "addressSpace": {
+                                    "addressPrefixes": [
+                                        "[variables('HubvNet').addressSpacePrefix]"
+                                    ]
+                                },
+                                "subnets": [
+                                    {
+                                        "name": "[variables('HubvNet').WebsubnetName]",
+                                        "properties": {
+                                            "addressPrefix": "[variables('HubvNet').WebsubnetPrefix]",
+                                            "networkSecurityGroup": {
+                                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').WebnsgName)]"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "[variables('HubvNet').AppsubnetName]",
+                                        "properties": {
+                                            "addressPrefix": "[variables('HubvNet').AppsubnetPrefix]",
+                                            "networkSecurityGroup": {
+                                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').AppnsgName)]"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "[variables('HubvNet').DBsubnetName]",
+                                        "properties": {
+                                            "addressPrefix": "[variables('HubvNet').DBsubnetPrefix]",
+                                            "networkSecurityGroup": {
+                                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').DBnsgName)]"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "resources": [
+                                
                             ]
                         }
-                    },
-                    {
-                        "name": "Block_Internet",
-                        "properties": {
-                            "description": "Block Internet",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "Internet",
-                            "access": "Deny",
-                            "priority": 200,
-                            "direction": "Outbound"
-                        }
-                    }
-                ]
+                    ]
+                }
             }
         },
         {
-            "apiVersion": "2017-06-01",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('HubvNet').AppnsgName]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "web_rule",
-                        "properties": {
-                            "description": "Allow WEB",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "80",
-                            "sourceAddressPrefix": "Internet",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 101,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
-                        "name": "azurestorageout",
-                        "properties": {
-                            "provisioningState": "Succeeded",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "Storage",
-                            "access": "Allow",
-                            "priority": 120,
-                            "direction": "Outbound",
-                            "sourcePortRanges": [],
-                            "destinationPortRanges": [
-                                "443",
-                                "80"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "Block_Internet",
-                        "properties": {
-                            "description": "Block Internet",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "Internet",
-                            "access": "Deny",
-                            "priority": 200,
-                            "direction": "Outbound"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2017-06-01",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('HubvNet').DBnsgName]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "web_rule",
-                        "properties": {
-                            "description": "Allow WEB",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "80",
-                            "sourceAddressPrefix": "Internet",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 101,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
-                        "name": "Block_FE",
-                        "properties": {
-                            "description": "Block Web Subnet",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "10.1.1.0/24",
-                            "destinationAddressPrefix": "*",
-                            "access": "Deny",
-                            "priority": 190,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
-                        "name": "azurestorageout",
-                        "properties": {
-                            "provisioningState": "Succeeded",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "Storage",
-                            "access": "Allow",
-                            "priority": 120,
-                            "direction": "Outbound",
-                            "sourcePortRanges": [],
-                            "destinationPortRanges": [
-                                "443",
-                                "80"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "Block_Internet",
-                        "properties": {
-                            "description": "Block Internet",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "Internet",
-                            "access": "Deny",
-                            "priority": 200,
-                            "direction": "Outbound"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2016-03-30",
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('HubvNetName')]",
+            "apiVersion": "2016-06-01",
+            "type": "virtualNetworkPeerings",
+            "name": "[variables('ManvNettoHubvNetPeeringName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').WebnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').AppnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').DBnsgName)]"
-
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
             ],
-            "comments": "This is the second vNet",
+            "comments": "This is the peering from ManvNet  to HubvNet ",
             "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[variables('HubvNet').addressSpacePrefix]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[variables('HubvNet').WebsubnetName]",
-                        "properties": {
-                            "addressPrefix": "[variables('HubvNet').WebsubnetPrefix]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').WebnsgName)]"
-                            }
-                        }
-                    },
-                    {
-                        "name": "[variables('HubvNet').AppsubnetName]",
-                        "properties": {
-                            "addressPrefix": "[variables('HubvNet').AppsubnetPrefix]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').AppnsgName)]"
-                            }
-                        }
-                    },
-                    {
-                        "name": "[variables('HubvNet').DBsubnetName]",
-                        "properties": {
-                            "addressPrefix": "[variables('HubvNet').DBsubnetPrefix]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').DBnsgName)]"
-                            }
-                        }
-                    }
-                ]
-            },
-            "resources": [
-                {
-                    "apiVersion": "2016-06-01",
-                    "type": "virtualNetworkPeerings",
-                    "name": "[variables('HubvNettoManvNetPeeringName')]",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
-                        "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
-                    ],
-                    "comments": "This is the peering from Prod vNet  to Man vNet",
-                    "properties": {
-                        "allowVirtualNetworkAccess": "true",
-                        "allowForwardedTraffic": "false",
-                        "allowGatewayTransit": "false",
-                        "useRemoteGateways": "false",
-                        "remoteVirtualNetwork": {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('ManvNetName'))]"
-                        }
-                    }
+                "allowVirtualNetworkAccess": "true",
+                "allowForwardedTraffic": "false",
+                "allowGatewayTransit": "false",
+                "useRemoteGateways": "false",
+                "remoteVirtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('HubvNetName'))]"
                 }
-            ]
+            }
+        },
+        {
+            "apiVersion": "2016-06-01",
+            "type": "virtualNetworkPeerings",
+            "name": "[variables('HubvNettoManvNetPeeringName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
+            ],
+            "comments": "This is the peering from Prod vNet  to Man vNet",
+            "properties": {
+                "allowVirtualNetworkAccess": "true",
+                "allowForwardedTraffic": "false",
+                "allowGatewayTransit": "false",
+                "useRemoteGateways": "false",
+                "remoteVirtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('ManvNetName'))]"
+                }
+            }
         }
-    ]
+    ],
+    "outputs": {}
 }
