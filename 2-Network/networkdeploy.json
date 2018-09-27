@@ -576,53 +576,53 @@
                                 ]
                             },
                             "resources": [
-                                
+                                {
+                                    "apiVersion": "2016-06-01",
+                                    "type": "virtualNetworkPeerings",
+                                    "name": "[variables('ManvNettoHubvNetPeeringName')]",
+                                    "location": "[resourceGroup().location]",
+                                    "dependsOn": [
+                                        "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
+                                        "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
+                                    ],
+                                    "comments": "This is the peering from ManvNet  to HubvNet ",
+                                    "properties": {
+                                        "allowVirtualNetworkAccess": "true",
+                                        "allowForwardedTraffic": "false",
+                                        "allowGatewayTransit": "false",
+                                        "useRemoteGateways": "false",
+                                        "remoteVirtualNetwork": {
+                                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('HubvNetName'))]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "apiVersion": "2016-06-01",
+                                    "type": "virtualNetworkPeerings",
+                                    "name": "[variables('HubvNettoManvNetPeeringName')]",
+                                    "location": "[resourceGroup().location]",
+                                    "dependsOn": [
+                                        "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
+                                        "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
+                                    ],
+                                    "comments": "This is the peering from Prod vNet  to Man vNet",
+                                    "properties": {
+                                        "allowVirtualNetworkAccess": "true",
+                                        "allowForwardedTraffic": "false",
+                                        "allowGatewayTransit": "false",
+                                        "useRemoteGateways": "false",
+                                        "remoteVirtualNetwork": {
+                                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('ManvNetName'))]"
+                                        }
+                                    }
+                                }
                             ]
                         }
                     ]
                 }
             }
-        },
-        {
-            "apiVersion": "2016-06-01",
-            "type": "virtualNetworkPeerings",
-            "name": "[variables('ManvNettoHubvNetPeeringName')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
-            ],
-            "comments": "This is the peering from ManvNet  to HubvNet ",
-            "properties": {
-                "allowVirtualNetworkAccess": "true",
-                "allowForwardedTraffic": "false",
-                "allowGatewayTransit": "false",
-                "useRemoteGateways": "false",
-                "remoteVirtualNetwork": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('HubvNetName'))]"
-                }
-            }
-        },
-        {
-            "apiVersion": "2016-06-01",
-            "type": "virtualNetworkPeerings",
-            "name": "[variables('HubvNettoManvNetPeeringName')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
-            ],
-            "comments": "This is the peering from Prod vNet  to Man vNet",
-            "properties": {
-                "allowVirtualNetworkAccess": "true",
-                "allowForwardedTraffic": "false",
-                "allowGatewayTransit": "false",
-                "useRemoteGateways": "false",
-                "remoteVirtualNetwork": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('ManvNetName'))]"
-                }
-            }
         }
+        
     ],
     "outputs": {}
 }
