@@ -58,3 +58,6 @@ New-AzureRmDeployment `
   foreach($rg in $rgs){
     Get-AzureRmResourceGroup -Name $rg.ResourceGroupName | Remove-AzureRmResourceGroup -Verbose -Force
   }
+
+
+  "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"

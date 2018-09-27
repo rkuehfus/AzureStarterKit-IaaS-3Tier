@@ -608,8 +608,8 @@
                                     "name": "[variables('HubvNettoManvNetPeeringName')]",
                                     "location": "[resourceGroup().location]",
                                     "dependsOn": [
-                                        "[resourceId(parameters('ManResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
-                                        "[concat('Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
+                                        "[resourceId(parameters('ManResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]"
+                                        
                                     ],
                                     "comments": "This is the peering from Prod vNet  to Man vNet",
                                     "properties": {
