@@ -106,6 +106,7 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('ManResourceGroupName'))]",
                 "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
             ],
@@ -129,6 +130,7 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('HubResourceGroupName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
                 "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
             ],
