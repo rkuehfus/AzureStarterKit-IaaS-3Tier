@@ -21,12 +21,12 @@
         "resourceGroupNames": {
             "type": "array",
             "defaultValue": [
-                "Management-Network",
-                "Management-CoreServices",
-                "Management-Compute",
-                "Hub-Network",
-                "Hub-CoreService",
-                "Hub-Compute"
+                "ManagementNetwork",
+                "ManagementCoreServices",
+                "ManagementCompute",
+                "HubNetwork",
+                "HubCoreService",
+                "HubCompute"
             ],
             "metadata": {
                 "description": "ResourceGroup Names"
@@ -52,8 +52,8 @@
         }
     },
     "variables": {
-        "ManResourceGroupName": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[0])]",
-        "HubResourceGroupName": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[3])]"
+        "ManResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[0])]",
+        "HubResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[3])]"
 
     },
     "resources": [
