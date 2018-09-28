@@ -35,6 +35,20 @@
         "resourceGroupLocation": {
             "type": "string",
             "defaultValue": "eastus"
+        },
+        "ManvNetName": {
+           "type": "string",
+           "defaultValue": "ManagementvNet",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "HubvNetName": {
+           "type": "string",
+           "defaultValue": "HubvNet",
+           "metadata": {
+                "description": ""
+            }
         }
     },
     "variables": {
@@ -84,6 +98,52 @@
                     "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/hubnetworkdeploy.json'))]",
                     "contentVersion":"1.0.0.0"
                  }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "ManToHubPeeringdeployment",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('ManResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]",
+                "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/mantohubpeeringdeploy.json'))]",
+                    "contentVersion":"1.0.0.0"
+                 },
+                 "parameters": {
+                    "ManvNetName":{"value": "[parameters('ManvNetName')]"},
+                    "HubvNetName":{"value": "[parameters('HubvNetName')]"},
+                    "ManResourceGroupName":{"value": "[variables('ManResourceGroupName')]"},
+                    "HubResourceGroupName":{"value": "[variables('HubResourceGroupName')]"}
+                  }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "HubToManPeeringdeployment",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('HubResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]",
+                "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/hubtomanpeeringdeploy.json'))]",
+                    "contentVersion":"1.0.0.0"
+                 },
+                 "parameters": {
+                    "ManvNetName":{"value": "[parameters('ManvNetName')]"},
+                    "HubvNetName":{"value": "[parameters('HubvNetName')]"},
+                    "ManResourceGroupName":{"value": "[variables('ManResourceGroupName')]"},
+                    "HubResourceGroupName":{"value": "[variables('HubResourceGroupName')]"}
+                  }
             }
         }
     ],

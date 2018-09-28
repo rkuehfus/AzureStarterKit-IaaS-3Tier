@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ManvNetName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "HubvNetName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "ManResourceGroupName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "HubResourceGroupName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        }
+    },
+    "variables": {
+        "HubvNettoManvNetPeeringName": "[concat(parameters('HubvNetName'), '-', parameters('ManvNetName'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-06-01",
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "name": "[concat(parameters('ManvNetName'), '/',variables('HubvNettoManvNetPeeringName'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId(parameters('ManResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('ManvNetName'))]",
+                "[resourceId(parameters('HubResourceGroupName'),'Microsoft.Network/virtualNetworks/', parameters('HubvNetName'))]"
+            ],
+            "comments": "This is the peering from ManvNet  to HubvNet ",
+            "properties": {
+                "allowVirtualNetworkAccess": "true",
+                "allowForwardedTraffic": "false",
+                "allowGatewayTransit": "false",
+                "useRemoteGateways": "false",
+                "remoteVirtualNetwork": {
+                    "id": "[resourceId(parameters('ManResourceGroupName'),'Microsoft.Network/virtualNetworks',parameters('ManvNetName'))]"
+                }
+            }
+          }
+    ],
+    "outputs": {}
+}
