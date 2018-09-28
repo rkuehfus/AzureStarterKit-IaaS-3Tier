@@ -106,8 +106,8 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
-                "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId(subscription().subscriptionId,variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
+                "[resourceId(subscription().subscriptionId,variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -129,8 +129,8 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
-                "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId(subscription().subscriptionId,variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
+                "[resourceId(subscription().subscriptionId,variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
