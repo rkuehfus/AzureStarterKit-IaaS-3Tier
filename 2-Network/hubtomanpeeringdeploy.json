@@ -22,7 +22,7 @@
         }
     },
     "variables": {
-        "HubvNettoManvNetPeeringName": "[concat(parameters('HubvNetName'), parameters('ManvNetName'))]"
+        "HubvNettoManvNetPeeringName": "[concat(parameters('HubvNetName'),'/', parameters('ManvNetName'))]"
     },
     "resources": [
         {
@@ -30,9 +30,6 @@
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "name": "[concat(parameters('ManvNetName'), '/',variables('HubvNettoManvNetPeeringName'))]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]"
-            ],
             "comments": "This is the peering from ManvNet  to HubvNet ",
             "properties": {
                 "allowVirtualNetworkAccess": "true",
