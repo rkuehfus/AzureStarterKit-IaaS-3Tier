@@ -70,7 +70,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2015-01-01",
             "name": "networkDeployment",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
@@ -85,7 +85,7 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2015-01-01",
             "name": "HubNetworkdeployment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
@@ -101,13 +101,13 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2015-01-01",
             "name": "ManToHubPeeringdeployment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId(subscription().subscriptionId,variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
-                "[resourceId(subscription().subscriptionId,variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -124,13 +124,13 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2015-01-01",
             "name": "HubToManPeeringdeployment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId(subscription().subscriptionId,variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
-                "[resourceId(subscription().subscriptionId,variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
+                "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
