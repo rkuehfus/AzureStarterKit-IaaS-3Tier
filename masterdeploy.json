@@ -106,7 +106,8 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('ManResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/deployments', 'networkDeployment')]",
+                "[resourceId('Microsoft.Resources/deployments', 'HubNetworkdeployment')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -117,7 +118,6 @@
                  "parameters": {
                     "ManvNetName":{"value": "[parameters('ManvNetName')]"},
                     "HubvNetName":{"value": "[parameters('HubvNetName')]"},
-                    "ManResourceGroupName":{"value": "[variables('ManResourceGroupName')]"},
                     "HubResourceGroupName":{"value": "[variables('HubResourceGroupName')]"}
                   }
             }
@@ -128,7 +128,8 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('HubResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/deployments', 'networkDeployment')]",
+                "[resourceId('Microsoft.Resources/deployments', 'HubNetworkdeployment')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -139,8 +140,7 @@
                  "parameters": {
                     "ManvNetName":{"value": "[parameters('ManvNetName')]"},
                     "HubvNetName":{"value": "[parameters('HubvNetName')]"},
-                    "ManResourceGroupName":{"value": "[variables('ManResourceGroupName')]"},
-                    "HubResourceGroupName":{"value": "[variables('HubResourceGroupName')]"}
+                    "ManResourceGroupName":{"value": "[variables('ManResourceGroupName')]"}
                   }
             }
         }
