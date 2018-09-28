@@ -106,8 +106,7 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'networkDeployment')]",
-                "[resourceId('Microsoft.Resources/deployments', 'HubNetworkdeployment')]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('ManResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -128,8 +127,7 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'networkDeployment')]",
-                "[resourceId('Microsoft.Resources/deployments', 'HubNetworkdeployment')]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('HubResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
