@@ -28,7 +28,7 @@
         {
             "apiVersion": "2016-06-01",
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "name": "[concat(parameters('ManvNetName'), '/',variables('HubvNettoManvNetPeeringName'))]",
+            "name": "[variables('HubvNettoManvNetPeeringName')]",
             "location": "[resourceGroup().location]",
             "comments": "This is the peering from ManvNet  to HubvNet ",
             "properties": {
