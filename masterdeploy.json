@@ -84,14 +84,14 @@
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters":{
-                    "_artifactsLocation": {"value": "parameters('_artifactsLocation')]"},
+                    "_artifactsLocation": {"value": "[parameters('_artifactsLocation')]"},
                     "ManvNetName":{"value": "[parameters('ManvNetName')]"},
                     "HubvNetName":{"value": "[parameters('HubvNetName')]"},
                     "HubResourceGroupName":{"value": "[variables('HubResourceGroupName')]"},
                     "ManResourceGroupName":{"value": "[variables('ManResourceGroupName')]"}
                  }
             }
-        },
+        }
         
         
         
