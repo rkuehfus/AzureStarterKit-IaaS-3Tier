@@ -79,7 +79,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/networkdeploy.json'))]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/networkdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  }
             }
@@ -95,7 +95,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/hubnetworkdeploy.json'))]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/hubnetworkdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  }
             }
@@ -112,7 +112,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/mantohubpeeringdeploy.json'))]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/mantohubpeeringdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {
@@ -135,7 +135,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('2-Network/hubtomanpeeringdeploy.json'))]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/hubtomanpeeringdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {
