@@ -61,7 +61,7 @@
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2018-05-01",
             "location": "[parameters('resourceGroupLocation')]",
-            "name": "[concat(parameters('envPrefixName'),'-',parameters('resourceGroupNames')[copyIndex()])]",
+            "name": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[copyIndex()])]",
             "copy": {
                 "name": "iterator",
                 "count": "[length(parameters('resourceGroupNames'))]"
@@ -70,11 +70,11 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2017-05-10",
             "name": "networkDeployment",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('ManResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('ManResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -85,12 +85,12 @@
             }
         },
         {
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2017-05-10",
             "name": "HubNetworkdeployment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('HubResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('HubResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -101,14 +101,12 @@
             }
         },
         {
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2017-05-10",
             "name": "ManToHubPeeringdeployment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('ManResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('ManResourceGroupName'))]",
-                "[resourceId(variables('HubResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('ManResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -125,14 +123,12 @@
             }
         },
         {
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2017-05-10",
             "name": "HubToManPeeringdeployment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('HubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('HubResourceGroupName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
-                "[resourceId(variables('ManResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('HubResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",

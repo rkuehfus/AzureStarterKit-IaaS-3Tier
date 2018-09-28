@@ -59,3 +59,5 @@ New-AzureRmDeployment `
     Get-AzureRmResourceGroup -Name $rg.ResourceGroupName | Remove-AzureRmResourceGroup -Verbose -Force
   }
 
+  "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]",
+  "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
