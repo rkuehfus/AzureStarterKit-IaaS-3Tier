@@ -126,7 +126,7 @@
             "name": "[variables('ManvNet').AppGWnsgName]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "location": "[resourceGroup().location]",
             "properties": {
