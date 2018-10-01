@@ -169,7 +169,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "properties": {
                 "securityRules": [
@@ -211,7 +211,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "properties": {
                 "securityRules": [
@@ -253,7 +253,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "properties": {
                 "securityRules": [
@@ -295,7 +295,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "properties": {
                 "securityRules": [
@@ -357,7 +357,7 @@
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').commonnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').helpernsgName)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "properties": {
                 "addressSpace": {
@@ -453,6 +453,10 @@
         "storageAccountName": {
             "type": "string",
             "value": "[variables('storageAccountName')]"
+          },
+          "WorkspaceName": {
+              "type": "string",
+              "value": "[variables('WorkspaceName')]"
           }
     }
 }
