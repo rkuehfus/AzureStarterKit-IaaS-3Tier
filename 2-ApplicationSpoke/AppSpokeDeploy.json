@@ -8,27 +8,27 @@
                  "description": ""
              }
          },
-         "ManvNetName": {
+         "ManHubvNetName": {
              "type": "string",
-             "defaultValue": "ManagementvNet",
+             "defaultValue": "ManagementAppSpokevNet",
              "metadata": {
                  "description": "Name for Management vNet"
              }
          },
-         "HubvNetName": {
+         "AppSpokevNetName": {
              "type": "string",
-             "defaultValue": "HubvNet",
+             "defaultValue": "AppSpokevNet",
              "metadata": {
                   "description": ""
               }
           },
-         "ManResourceGroupName": {
+         "ManHubResourceGroupName": {
             "type": "string",
             "metadata": {
                  "description": ""
              }
          },
-         "HubResourceGroupName": {
+         "AppSpokeResourceGroupName": {
             "type": "string",
             "metadata": {
                  "description": ""
@@ -36,7 +36,7 @@
          }
     },
     "variables": {
-        "HubvNet": {
+        "AppSpokevNet": {
             "addressSpacePrefix": "10.1.0.0/16",
             "WebsubnetName": "WebSubnet",
             "WebsubnetPrefix": "10.1.1.0/24",
@@ -53,7 +53,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('HubvNet').WebnsgName]",
+            "name": "[variables('AppSpokevNet').WebnsgName]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
@@ -108,7 +108,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('HubvNet').AppnsgName]",
+            "name": "[variables('AppSpokevNet').AppnsgName]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
@@ -164,7 +164,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('HubvNet').DBnsgName]",
+            "name": "[variables('AppSpokevNet').DBnsgName]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
@@ -234,45 +234,45 @@
         {
             "apiVersion": "2016-03-30",
             "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('HubvNetName')]",
+            "name": "[parameters('AppSpokevNetName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').WebnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').AppnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('HubvNet').DBnsgName)]"
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('AppSpokevNet').WebnsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('AppSpokevNet').AppnsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('AppSpokevNet').DBnsgName)]"
             ],
             "comments": "This is the second vNet",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[variables('HubvNet').addressSpacePrefix]"
+                        "[variables('AppSpokevNet').addressSpacePrefix]"
                     ]
                 },
                 "subnets": [
                     {
-                        "name": "[variables('HubvNet').WebsubnetName]",
+                        "name": "[variables('AppSpokevNet').WebsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('HubvNet').WebsubnetPrefix]",
+                            "addressPrefix": "[variables('AppSpokevNet').WebsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').WebnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('AppSpokevNet').WebnsgName)]"
                             }
                         }
                     },
                     {
-                        "name": "[variables('HubvNet').AppsubnetName]",
+                        "name": "[variables('AppSpokevNet').AppsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('HubvNet').AppsubnetPrefix]",
+                            "addressPrefix": "[variables('AppSpokevNet').AppsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').AppnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('AppSpokevNet').AppnsgName)]"
                             }
                         }
                     },
                     {
-                        "name": "[variables('HubvNet').DBsubnetName]",
+                        "name": "[variables('AppSpokevNet').DBsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('HubvNet').DBsubnetPrefix]",
+                            "addressPrefix": "[variables('AppSpokevNet').DBsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('HubvNet').DBnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('AppSpokevNet').DBnsgName)]"
                             }
                         }
                     }
@@ -284,22 +284,22 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "ManToHubPeeringdeployment",
+            "name": "ManHubToAppSpokePeeringdeployment",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('ManResourceGroupName')]",
+            "resourceGroup": "[parameters('ManHubResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('AppSpokevNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '2-Hub/mantohubpeeringdeploy.json')]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-ApplicationSpoke/ManHubtoAppSpokepeeringdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {
-                    "ManvNetName":{"value": "[parameters('ManvNetName')]"},
-                    "HubvNetName":{"value": "[parameters('HubvNetName')]"},
-                    "HubResourceGroupName":{"value": "[parameters('HubResourceGroupName')]"}
+                    "ManHubvNetName":{"value": "[parameters('ManHubvNetName')]"},
+                    "AppSpokevNetName":{"value": "[parameters('AppSpokevNetName')]"},
+                    "AppSpokeResourceGroupName":{"value": "[parameters('AppSpokeResourceGroupName')]"}
                   }
             }
         },
@@ -307,20 +307,20 @@
             "apiVersion": "2017-05-10",
             "name": "HubToManPeeringdeployment",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('HubResourceGroupName')]",
+            "resourceGroup": "[parameters('AppSpokeResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('HubvNetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('AppSpokevNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '2-Hub/hubtomanpeeringdeploy.json')]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-ApplicationSpoke/AppSpoketoManHubpeeringdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {
-                    "ManvNetName":{"value": "[parameters('ManvNetName')]"},
-                    "HubvNetName":{"value": "[parameters('HubvNetName')]"},
-                    "ManResourceGroupName":{"value": "[parameters('ManResourceGroupName')]"}
+                    "ManHubvNetName":{"value": "[parameters('ManHubvNetName')]"},
+                    "AppSpokevNetName":{"value": "[parameters('AppSpokevNetName')]"},
+                    "ManHubResourceGroupName":{"value": "[parameters('ManHubResourceGroupName')]"}
                   }
             }
         }

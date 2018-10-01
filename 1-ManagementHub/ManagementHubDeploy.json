@@ -20,27 +20,27 @@
                 "description": ""
             }
         },
-        "ManvNetName": {
+        "ManHubvNetName": {
             "type": "string",
             "defaultValue": "ManagementvNet",
             "metadata": {
                 "description": "Name for Management vNet"
             }
         },
-        "HubvNetName": {
+        "AppSpokevNetName": {
             "type": "string",
-            "defaultValue": "HubvNet",
+            "defaultValue": "AppSpokevNet",
             "metadata": {
                 "description": ""
             }
         },
-        "ManResourceGroupName": {
+        "ManHubResourceGroupName": {
             "type": "string",
             "metadata": {
                 "description": ""
             }
         },
-        "HubResourceGroupName": {
+        "AppSpokeResourceGroupName": {
             "type": "string",
             "metadata": {
                 "description": ""
@@ -61,7 +61,7 @@
         }
     },
     "variables": {
-        "ManvNet": {
+        "ManHubvNet": {
             "addressSpacePrefix": "10.0.0.0/16",
             "AppGWsubnetName": "AppGWSubnet",
             "AppGWsubnetPrefix": "10.0.1.0/24",
@@ -129,7 +129,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('ManvNet').AppGWnsgName]",
+            "name": "[variables('ManHubvNet').AppGWnsgName]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
@@ -171,7 +171,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('ManvNet').inAzFWnsgName]",
+            "name": "[variables('ManHubvNet').inAzFWnsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
@@ -213,7 +213,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('ManvNet').outAzFWnsgName]",
+            "name": "[variables('ManHubvNet').outAzFWnsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
@@ -255,7 +255,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('ManvNet').commonnsgName]",
+            "name": "[variables('ManHubvNet').commonnsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
@@ -297,7 +297,7 @@
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('ManvNet').helpernsgName]",
+            "name": "[variables('ManHubvNet').helpernsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
@@ -353,67 +353,67 @@
         {
             "apiVersion": "2016-03-30",
             "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('ManvNetName')]",
+            "name": "[parameters('ManHubvNetName')]",
             "location": "[resourceGroup().location]",
             "comments": "This is the Management vNet",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').AppGWnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').inAzFWnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').outAzFWnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').commonnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').helpernsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').AppGWnsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').inAzFWnsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').outAzFWnsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').commonnsgName)]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').helpernsgName)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
             ],
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[variables('ManvNet').addressSpacePrefix]"
+                        "[variables('ManHubvNet').addressSpacePrefix]"
                     ]
                 },
                 "subnets": [
                     {
-                        "name": "[variables('ManvNet').AppGWsubnetName]",
+                        "name": "[variables('ManHubvNet').AppGWsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('ManvNet').AppGWsubnetPrefix]",
+                            "addressPrefix": "[variables('ManHubvNet').AppGWsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManvNet').AppGWnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').AppGWnsgName)]"
                             }
                         }
                     },
                     {
-                        "name": "[variables('ManvNet').inAzFWsubnetName]",
+                        "name": "[variables('ManHubvNet').inAzFWsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('ManvNet').inAzFWsubnetPrefix]",
+                            "addressPrefix": "[variables('ManHubvNet').inAzFWsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManvNet').inAzFWnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').inAzFWnsgName)]"
                             }
                         }
                     },
                     {
-                        "name": "[variables('ManvNet').outAzFWsubnetName]",
+                        "name": "[variables('ManHubvNet').outAzFWsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('ManvNet').outAzFWsubnetPrefix]",
+                            "addressPrefix": "[variables('ManHubvNet').outAzFWsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManvNet').outAzFWnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').outAzFWnsgName)]"
                             }
                         }
                     },
                     {
-                        "name": "[variables('ManvNet').commonsubnetName]",
+                        "name": "[variables('ManHubvNet').commonsubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('ManvNet').commonsubnetPrefix]",
+                            "addressPrefix": "[variables('ManHubvNet').commonsubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManvNet').commonnsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').commonnsgName)]"
                             }
                         }
                     },
                     {
-                        "name": "[variables('ManvNet').helpersubnetName]",
+                        "name": "[variables('ManHubvNet').helpersubnetName]",
                         "properties": {
-                            "addressPrefix": "[variables('ManvNet').helpersubnetPrefix]",
+                            "addressPrefix": "[variables('ManHubvNet').helpersubnetPrefix]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManvNet').helpernsgName)]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').helpernsgName)]"
                             }
                         }
                     }
@@ -425,9 +425,9 @@
             "apiVersion": "2017-05-10",
             "name": "HubNetworkdeployment",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('HubResourceGroupName')]",
+            "resourceGroup": "[parameters('AppSpokeResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManvNetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManHubvNetName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -439,17 +439,17 @@
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     },
-                    "ManvNetName": {
-                        "value": "[parameters('ManvNetName')]"
+                    "ManHubvNetName": {
+                        "value": "[parameters('ManHubvNetName')]"
                     },
-                    "HubvNetName": {
-                        "value": "[parameters('HubvNetName')]"
+                    "AppSpokevNetName": {
+                        "value": "[parameters('AppSpokevNetName')]"
                     },
-                    "HubResourceGroupName": {
-                        "value": "[parameters('HubResourceGroupName')]"
+                    "AppSpokeResourceGroupName": {
+                        "value": "[parameters('AppSpokeResourceGroupName')]"
                     },
-                    "ManResourceGroupName": {
-                        "value": "[parameters('ManResourceGroupName')]"
+                    "ManHubResourceGroupName": {
+                        "value": "[parameters('ManHubResourceGroupName')]"
                     }
                 }
             }

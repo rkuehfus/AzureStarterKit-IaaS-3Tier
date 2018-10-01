@@ -2,19 +2,19 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ManvNetName": {
+        "ManHubvNetName": {
            "type": "string",
            "metadata": {
                 "description": ""
             }
         },
-        "HubvNetName": {
+        "AppSpokevNetName": {
            "type": "string",
            "metadata": {
                 "description": ""
             }
         },
-        "ManResourceGroupName": {
+        "ManHubResourceGroupName": {
            "type": "string",
            "metadata": {
                 "description": ""
@@ -22,22 +22,22 @@
         }
     },
     "variables": {
-        "HubvNettoManvNetPeeringName": "[concat(parameters('HubvNetName'),'/', parameters('ManvNetName'))]"
+        "AppSpokevNettoManHubvNetPeeringName": "[concat(parameters('AppSpokevNetName'),'/', parameters('ManHubvNetName'))]"
     },
     "resources": [
         {
             "apiVersion": "2016-06-01",
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "name": "[variables('HubvNettoManvNetPeeringName')]",
+            "name": "[variables('AppSpokevNettoManHubvNetPeeringName')]",
             "location": "[resourceGroup().location]",
-            "comments": "This is the peering from ManvNet  to HubvNet ",
+            "comments": "This is the peering from ManHubvNet  to AppSpokevNet ",
             "properties": {
                 "allowVirtualNetworkAccess": "true",
                 "allowForwardedTraffic": "false",
                 "allowGatewayTransit": "false",
                 "useRemoteGateways": "false",
                 "remoteVirtualNetwork": {
-                    "id": "[resourceId(parameters('ManResourceGroupName'),'Microsoft.Network/virtualNetworks',parameters('ManvNetName'))]"
+                    "id": "[resourceId(parameters('ManHubResourceGroupName'),'Microsoft.Network/virtualNetworks',parameters('ManHubvNetName'))]"
                 }
             }
           }

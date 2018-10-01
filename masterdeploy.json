@@ -21,12 +21,12 @@
         "resourceGroupNames": {
             "type": "array",
             "defaultValue": [
-                "ManagementNetwork",
-                "ManagementCoreServices",
-                "ManagementCompute",
-                "HubNetwork",
-                "HubCoreService",
-                "HubCompute"
+                "ManagementHubNetwork",
+                "ManagementHubCoreServices",
+                "ManagementHubCompute",
+                "AppSpokeNetwork",
+                "AppSpokeCoreService",
+                "AppSpokeCompute"
             ],
             "metadata": {
                 "description": "ResourceGroup Names"
@@ -49,24 +49,24 @@
                 "description": "Specify the region for your Workspace"
             }
         },
-        "ManvNetName": {
+        "ManHubvNetName": {
             "type": "string",
-            "defaultValue": "ManagementvNet",
+            "defaultValue": "ManagementAppSpokevNet",
             "metadata": {
                 "description": ""
             }
         },
-        "HubvNetName": {
+        "AppSpokevNetName": {
             "type": "string",
-            "defaultValue": "HubvNet",
+            "defaultValue": "AppSpokevNet",
             "metadata": {
                 "description": ""
             }
         }
     },
     "variables": {
-        "ManResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[0])]",
-        "HubResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[3])]"
+        "ManHubResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[0])]",
+        "AppSpokeResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[3])]"
     },
     "resources": [
         {
@@ -84,31 +84,31 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "networkDeployment",
-            "resourceGroup": "[variables('ManResourceGroupName')]",
+            "resourceGroup": "[variables('ManHubResourceGroupName')]",
             "dependsOn": [
                 "rgiterator"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '1-Management/ManagementDeploy.json')]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '1-ManagementHub/ManagementHubDeploy.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "_artifactsLocation": {
                         "value": "[parameters('_artifactsLocation')]"
                     },
-                    "ManvNetName": {
-                        "value": "[parameters('ManvNetName')]"
+                    "ManHubvNetName": {
+                        "value": "[parameters('ManHubvNetName')]"
                     },
-                    "HubvNetName": {
-                        "value": "[parameters('HubvNetName')]"
+                    "AppSpokevNetName": {
+                        "value": "[parameters('AppSpokevNetName')]"
                     },
-                    "HubResourceGroupName": {
-                        "value": "[variables('HubResourceGroupName')]"
+                    "AppSpokeResourceGroupName": {
+                        "value": "[variables('AppSpokeResourceGroupName')]"
                     },
-                    "ManResourceGroupName": {
-                        "value": "[variables('ManResourceGroupName')]"
+                    "ManHubResourceGroupName": {
+                        "value": "[variables('ManHubResourceGroupName')]"
                     },
                     "envPrefixName": {
                         "value": "[parameters('envPrefixName')]"
@@ -121,13 +121,13 @@
         }
     ],
     "outputs": {
-        "ManResourceGroupName": {
+        "ManHubResourceGroupName": {
             "type": "string",
-            "value": "[variables('ManResourceGroupName')]"
+            "value": "[variables('ManHubResourceGroupName')]"
         },
-        "HubResourceGroupName": {
+        "AppSpokeResourceGroupName": {
             "type": "string",
-            "value": "[variables('HubResourceGroupName')]"
+            "value": "[variables('AppSpokeResourceGroupName')]"
         }
     }
 }
