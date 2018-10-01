@@ -38,7 +38,16 @@
         },
         "WorkspaceLocation": {
             "type": "string",
-            "defaultValue": "eastus"
+            "defaultValue": "East US",
+            "allowedValues": [
+                "East US",
+                "West Europe",
+                "Southeast Asia",
+                "Australia Southeast"
+            ],
+            "metadata": {
+                "description": "Specify the region for your Workspace"
+            }
         },
         "ManvNetName": {
             "type": "string",
