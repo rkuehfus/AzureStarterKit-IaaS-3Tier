@@ -80,7 +80,7 @@
             "helpernsgName": "helpernsg"
         },
         "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]",
-        "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'diagLogs')]"
+        "storageAccountName": "[concat('diaglogs',uniquestring(resourceGroup().id))]"
     },
     "resources": [
         {
