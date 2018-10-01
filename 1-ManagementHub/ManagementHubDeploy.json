@@ -432,7 +432,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '2-Hub/HubDeploy.json')]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-ApplicationSpoke/AppSpokeDeploy.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
