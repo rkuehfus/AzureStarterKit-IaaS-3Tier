@@ -293,7 +293,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/mantohubpeeringdeploy.json')]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Hub/mantohubpeeringdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {
@@ -314,7 +314,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/hubtomanpeeringdeploy.json')]",
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Hub/hubtomanpeeringdeploy.json')]",
                     "contentVersion":"1.0.0.0"
                  },
                  "parameters": {

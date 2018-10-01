@@ -3,8 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "_artifactsLocation": {
-           "type": "string",
-           "metadata": {
+            "type": "string",
+            "metadata": {
+                "description": ""
+            }
+        },
+        "envPrefixName": {
+            "type": "string",
+            "metadata": {
+                "description": ""
+            }
+        },
+        "WorkspaceLocation": {
+            "type": "string",
+            "metadata": {
                 "description": ""
             }
         },
@@ -19,19 +31,32 @@
             "type": "string",
             "defaultValue": "HubvNet",
             "metadata": {
-                 "description": ""
-             }
-         },
+                "description": ""
+            }
+        },
         "ManResourceGroupName": {
-           "type": "string",
-           "metadata": {
+            "type": "string",
+            "metadata": {
                 "description": ""
             }
         },
         "HubResourceGroupName": {
-           "type": "string",
-           "metadata": {
+            "type": "string",
+            "metadata": {
                 "description": ""
+            }
+        },
+        "storageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_ZRS",
+                "Premium_LRS"
+            ],
+            "metadata": {
+                "description": "Storage Account type"
             }
         }
     },
@@ -53,13 +78,56 @@
             "helpersubnetName": "helperSubnet",
             "helpersubnetPrefix": "10.0.5.0/24",
             "helpernsgName": "helpernsg"
-        }
+        },
+        "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]",
+        "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'diagLogs')]"
     },
     "resources": [
+        {
+            "apiVersion": "2017-03-15-preview",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "name": "[variables('WorkspaceName')]",
+            "location": "[parameters('WorkspaceLocation')]",
+            "resources": [
+                {
+                    "apiVersion": "2015-11-01-preview",
+                    "location": "[parameters('WorkspaceLocation')]",
+                    "name": "[concat('ServiceMap', '(', variables('WorkspaceName'),')')]",
+                    "type": "Microsoft.OperationsManagement/solutions",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('WorkspaceName'))]"
+                    ],
+                    "properties": {
+                        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('WorkspaceName'))]"
+                    },
+                    "plan": {
+                        "name": "[concat('ServiceMap', '(', variables('WorkspaceName'),')')]",
+                        "publisher": "Microsoft",
+                        "product": "[Concat('OMSGallery/', 'ServiceMap')]",
+                        "promotionCode": ""
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "apiVersion": "2018-02-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('storageAccountType')]"
+            },
+            "kind": "StorageV2",
+            "properties": {}
+        },
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManvNet').AppGWnsgName]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+            ],
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
@@ -99,6 +167,10 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManvNet').inAzFWnsgName]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+            ],
             "properties": {
                 "securityRules": [
                     {
@@ -137,6 +209,10 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManvNet').outAzFWnsgName]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+            ],
             "properties": {
                 "securityRules": [
                     {
@@ -175,6 +251,10 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManvNet').commonnsgName]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+            ],
             "properties": {
                 "securityRules": [
                     {
@@ -213,6 +293,10 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManvNet').helpernsgName]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
+            ],
             "properties": {
                 "securityRules": [
                     {
@@ -271,7 +355,9 @@
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').inAzFWnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').outAzFWnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').commonnsgName)]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').helpernsgName)]"
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManvNet').helpernsgName)]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('storageAccountName'))]"
             ],
             "properties": {
                 "addressSpace": {
@@ -327,9 +413,7 @@
                     }
                 ]
             },
-            "resources": [
-                
-            ]
+            "resources": []
         },
         {
             "apiVersion": "2017-05-10",
@@ -342,19 +426,33 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), '2-Network/hubnetworkdeploy.json')]",
-                    "contentVersion":"1.0.0.0"
-                 },
-                 "parameters":{
-                    "_artifactsLocation": {"value": "[parameters('_artifactsLocation')]"},
-                    "ManvNetName":{"value": "[parameters('ManvNetName')]"},
-                    "HubvNetName":{"value": "[parameters('HubvNetName')]"},
-                    "HubResourceGroupName":{"value": "[parameters('HubResourceGroupName')]"},
-                    "ManResourceGroupName":{"value": "[parameters('ManResourceGroupName')]"}
-                 }
+                    "uri": "[uri(parameters('_artifactsLocation'), '2-Hub/HubDeploy.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "_artifactsLocation": {
+                        "value": "[parameters('_artifactsLocation')]"
+                    },
+                    "ManvNetName": {
+                        "value": "[parameters('ManvNetName')]"
+                    },
+                    "HubvNetName": {
+                        "value": "[parameters('HubvNetName')]"
+                    },
+                    "HubResourceGroupName": {
+                        "value": "[parameters('HubResourceGroupName')]"
+                    },
+                    "ManResourceGroupName": {
+                        "value": "[parameters('ManResourceGroupName')]"
+                    }
+                }
             }
         }
-        
     ],
-    "outputs": {}
+    "outputs": {
+        "storageAccountName": {
+            "type": "string",
+            "value": "[variables('storageAccountName')]"
+          }
+    }
 }
