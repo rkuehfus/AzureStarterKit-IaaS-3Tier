@@ -8,6 +8,12 @@
                 "description": ""
             }
         },
+        "ManCoreServicesResourceGroupName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
         "envPrefixName": {
             "type": "string",
             "metadata": {
@@ -84,36 +90,31 @@
     },
     "resources": [
         {
-            "apiVersion": "2017-03-15-preview",
-            "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('WorkspaceName')]",
-            "location": "[parameters('WorkspaceLocation')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "LogAnalyticsDeployment",
+            "resourceGroup": "[parameters('ManCoreServicesResourceGroupName')]",
+            "dependsOn": [
+                "rgiterator"
+            ],
             "properties": {
-                "sku": {
-                        "name": "pergb2018"
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), '1-ManagementHub/LogAnalyticsDeploy.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "WorkspaceLocation": {
+                        "value": "[parameters('WorkspaceLocation')]"
                     },
-                "retentionInDays": 180
-            },
-            "resources": [
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "location": "[parameters('WorkspaceLocation')]",
-                    "name": "[concat('ServiceMap', '(', variables('WorkspaceName'),')')]",
-                    "type": "Microsoft.OperationsManagement/solutions",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('WorkspaceName'))]"
-                    ],
-                    "properties": {
-                        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('WorkspaceName'))]"
+                    "WorkspaceName": {
+                        "value": "[variables('WorkspaceName')]"
                     },
-                    "plan": {
-                        "name": "[concat('ServiceMap', '(', variables('WorkspaceName'),')')]",
-                        "publisher": "Microsoft",
-                        "product": "[Concat('OMSGallery/', 'ServiceMap')]",
-                        "promotionCode": ""
+                    "AppSpokevNetName": {
+                        "value": "[parameters('AppSpokevNetName')]"
                     }
                 }
-            ]
+            }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -132,7 +133,7 @@
             "name": "[variables('ManHubvNet').AppGWnsgName]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "location": "[resourceGroup().location]",
             "properties": {
@@ -175,7 +176,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
                 "securityRules": [
@@ -217,7 +218,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
                 "securityRules": [
@@ -259,7 +260,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
                 "securityRules": [
@@ -301,7 +302,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
                 "securityRules": [
@@ -363,7 +364,7 @@
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').commonnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').helpernsgName)]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
                 "addressSpace": {

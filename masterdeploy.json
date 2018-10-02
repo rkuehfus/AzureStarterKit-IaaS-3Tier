@@ -66,6 +66,7 @@
     },
     "variables": {
         "ManHubResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[0])]",
+        "ManCoreServicesResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[1])]",
         "AppSpokeResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[3])]"
     },
     "resources": [
@@ -83,7 +84,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
-            "name": "networkDeployment",
+            "name": "ManHubDeployment",
             "resourceGroup": "[variables('ManHubResourceGroupName')]",
             "dependsOn": [
                 "rgiterator"
@@ -100,6 +101,9 @@
                     },
                     "ManHubvNetName": {
                         "value": "[parameters('ManHubvNetName')]"
+                    },
+                    "ManCoreServicesResourceGroupName": {
+                        "value": "[variables('ManCoreServicesResourceGroupName')]"
                     },
                     "AppSpokevNetName": {
                         "value": "[parameters('AppSpokevNetName')]"
