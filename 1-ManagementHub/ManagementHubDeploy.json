@@ -136,49 +136,6 @@
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "location": "[resourceGroup().location]",
-            "resources": [
-                {
-                    "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
-                    "apiVersion": "2017-05-01-preview",
-                    "name": "[concat('Microsoft.Insights/', variables('ManHubvNet').AppGWnsgName, 'diagsettings')]",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[concat('Microsoft.Network/networkSecurityGroups',variables('ManHubvNet').AppGWnsgName)]"
-                    ],
-                    "properties": {
-                        "workspaceId": "[variables('WorkspaceName')]",
-                        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                        "logs": [
-                            {
-                                "category": "NetworkSecurityGroupEvent",
-                                "enabled": true,
-                                "retentionPolicy": {
-                                    "days": 0,
-                                    "enabled": false
-                                  }
-                            },
-                            {
-                                "category": "NetworkSecurityGroupRuleCounter",
-                                "enabled": true,
-                                "retentionPolicy": {
-                                    "days": 0,
-                                    "enabled": false
-                                  }
-                            }
-                        ],
-                        "metrics": [
-                            {
-                              "category": "AllMetrics",
-                              "enabled": true,
-                              "retentionPolicy": {
-                                "enabled": true,
-                                "days": 180
-                              }
-                            }
-                          ]
-                    }
-                }
-            ],
             "properties": {
                 "securityRules": [
                     {
@@ -210,6 +167,47 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat('Microsoft.Insights/', variables('ManHubvNet').AppGWnsgName, 'diagsettings')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkSecurityGroups',variables('ManHubvNet').AppGWnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[variables('WorkspaceName')]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                          }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                          }
+                    }
+                ],
+                "metrics": [
+                    {
+                      "category": "AllMetrics",
+                      "enabled": true,
+                      "retentionPolicy": {
+                        "enabled": true,
+                        "days": 180
+                      }
+                    }
+                  ]
             }
         },
         {
