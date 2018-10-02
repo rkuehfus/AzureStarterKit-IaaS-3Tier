@@ -173,7 +173,7 @@
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').AppGWnsgName)]"
             ],
             "properties": {
-                "workspaceId": "[variables('WorkspaceName')]",
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
                 "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "logs": [
                     {
