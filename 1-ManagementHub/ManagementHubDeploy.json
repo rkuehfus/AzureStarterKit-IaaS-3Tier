@@ -172,7 +172,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
-            "name": "[concat('Microsoft.Insights/', variables('ManHubvNet').AppGWnsgName, 'diagsettings')]",
+            "name": "[concat('Microsoft.Insights/', 'forSecurityTeam')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkSecurityGroups',variables('ManHubvNet').AppGWnsgName)]"
