@@ -172,7 +172,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
-            "name": "[concat('Microsoft.Insights/', 'forSecurityTeam')]",
+            "name": "[concat('Microsoft.Insights/', variables('ManHubvNet').AppGWnsgName, '/forSecurityTeam')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').AppGWnsgName)]"
@@ -197,17 +197,7 @@
                             "enabled": false
                           }
                     }
-                ],
-                "metrics": [
-                    {
-                      "category": "AllMetrics",
-                      "enabled": true,
-                      "retentionPolicy": {
-                        "enabled": true,
-                        "days": 180
-                      }
-                    }
-                  ]
+                ]
             }
         },
         {
