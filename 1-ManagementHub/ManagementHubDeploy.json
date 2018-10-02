@@ -175,7 +175,7 @@
             "name": "[concat('Microsoft.Insights/', 'forSecurityTeam')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkSecurityGroups',variables('ManHubvNet').AppGWnsgName)]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').AppGWnsgName)]"
             ],
             "properties": {
                 "workspaceId": "[variables('WorkspaceName')]",
