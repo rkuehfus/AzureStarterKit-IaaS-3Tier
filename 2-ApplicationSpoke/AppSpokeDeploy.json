@@ -10,7 +10,7 @@
          },
          "ManHubvNetName": {
              "type": "string",
-             "defaultValue": "ManagementAppSpokevNet",
+             "defaultValue": "ManagementHubvNet",
              "metadata": {
                  "description": "Name for Management vNet"
              }
