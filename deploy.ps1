@@ -7,5 +7,5 @@ New-AzureRmDeployment `
   -Name $job `
   -Location eastus `
   -TemplateFile $template `
-  -envPrefixName demo2 `
+  -envPrefixName demo3 `
   -resourceGroupLocation eastus
