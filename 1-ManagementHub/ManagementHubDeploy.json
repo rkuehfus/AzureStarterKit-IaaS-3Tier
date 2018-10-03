@@ -321,7 +321,7 @@
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "logs": [
                     {
                         "category": "NetworkSecurityGroupEvent",
@@ -479,7 +479,7 @@
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "logs": [
                     {
                         "category": "NetworkSecurityGroupEvent",
