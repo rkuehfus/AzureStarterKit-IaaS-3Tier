@@ -1,0 +1,28 @@
+{
+    "name": "[concat(variables('ManHubvNet').AppGWnsgName, '/', 'Microsoft.Network.flowlogs')]",
+    "type": "Microsoft.Network/networkWatchers/FlowLogs",
+    "apiVersion": "2018-08-01",
+    "location":"[resourceGroup().location]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').AppGWnsgName)]"
+    ],
+    "properties":{
+        "targetResourceId": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').AppGWnsgName)]",
+        "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
+        "storageId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+        "enabled": true,
+        "flowAnalyticsConfiguration": {
+            "networkWatcherFlowAnalyticsConfiguration": {
+              "enabled": true,
+              "workspaceId": "[reference(resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))).customerId]",
+              "workspaceRegion": "[parameters('WorkspaceLocation')]",
+              "workspaceResourceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]"
+            }
+          },
+          "retentionPolicy": {
+            "days": "[parameters('retentionPolicy')]",
+            "enabled": true
+          }
+        
+    }
+}

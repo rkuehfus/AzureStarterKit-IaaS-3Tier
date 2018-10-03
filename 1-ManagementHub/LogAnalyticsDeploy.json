@@ -15,20 +15,20 @@
             }
         },
         "retentionPolicy": {
-           "type": "int",
-           "metadata": {
+            "type": "int",
+            "metadata": {
                 "description": ""
             }
         },
         "storageAccountName": {
-           "type": "string",
-           "metadata": {
+            "type": "string",
+            "metadata": {
                 "description": ""
             }
         },
         "storageAccountType": {
-           "type": "string",
-           "metadata": {
+            "type": "string",
+            "metadata": {
                 "description": ""
             }
         }

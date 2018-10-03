@@ -70,6 +70,19 @@
             "metadata": {
                 "description": ""
             }
+        },
+        "username": {
+            "type": "string",
+            "defaultValue": "vmadmin",
+            "metadata": {
+                "description": "VM local administrator username"
+            }
+        },
+        "password": {
+            "type": "securestring",
+            "metadata": {
+                "description": "VM local administrator password"
+            }
         }
     },
     "variables": {
