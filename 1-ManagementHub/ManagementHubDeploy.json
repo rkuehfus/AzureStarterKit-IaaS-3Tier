@@ -587,7 +587,9 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('AppSpokeResourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManHubvNetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManHubvNetName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
                 "mode": "Incremental",
