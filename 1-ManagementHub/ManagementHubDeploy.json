@@ -475,7 +475,7 @@
             "name": "[concat(variables('ManHubvNet').helpernsgName, '/', 'Microsoft.Insights/setForSecurity')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').helpernsgName)]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').helpernsgName)]"
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
