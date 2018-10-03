@@ -116,27 +116,21 @@
                     },
                     "retentionPolicy": {
                         "value": "[parameters('retentionPolicy')]"
+                    },
+                    "storageAccountType": {
+                        "value": "[parameters('storageAccountType')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
                     }
                 }
             }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[variables('storageAccountName')]",
-            "apiVersion": "2018-02-01",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "[parameters('storageAccountType')]"
-            },
-            "kind": "StorageV2",
-            "properties": {}
         },
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManHubvNet').AppGWnsgName]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "location": "[resourceGroup().location]",
@@ -183,7 +177,7 @@
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "logs": [
                     {
                         "category": "NetworkSecurityGroupEvent",
@@ -210,7 +204,6 @@
             "name": "[variables('ManHubvNet').inAzFWnsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
@@ -256,7 +249,7 @@
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "logs": [
                     {
                         "category": "NetworkSecurityGroupEvent",
@@ -283,7 +276,6 @@
             "name": "[variables('ManHubvNet').outAzFWnsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
@@ -325,7 +317,7 @@
             "name": "[concat(variables('ManHubvNet').outAzFWnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').outAzFWnsgName)]"
+                "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').outAzFWnsgName)]"
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
@@ -356,7 +348,6 @@
             "name": "[variables('ManHubvNet').commonnsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
@@ -402,7 +393,7 @@
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "logs": [
                     {
                         "category": "NetworkSecurityGroupEvent",
@@ -429,7 +420,6 @@
             "name": "[variables('ManHubvNet').helpernsgName]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
@@ -485,7 +475,7 @@
             "name": "[concat(variables('ManHubvNet').helpernsgName, '/', 'Microsoft.Insights/setForSecurity')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').helpernsgName)]"
+                "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').helpernsgName)]"
             ],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
@@ -522,7 +512,6 @@
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').outAzFWnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').commonnsgName)]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('ManHubvNet').helpernsgName)]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
@@ -588,7 +577,6 @@
             "resourceGroup": "[parameters('AppSpokeResourceGroupName')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('ManHubvNetName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
             "properties": {
