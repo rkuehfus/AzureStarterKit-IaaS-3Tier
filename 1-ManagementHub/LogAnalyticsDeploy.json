@@ -13,6 +13,12 @@
             "metadata": {
                 "description": ""
             }
+        },
+        "retentionPolicy": {
+           "type": "int",
+           "metadata": {
+                "description": ""
+            }
         }
     },
     "variables": {
@@ -79,7 +85,7 @@
                 "sku": {
                     "name": "pergb2018"
                 },
-                "retentionInDays": 180
+                "retentionInDays": "[parameters('retentionPolicy')]"
             },
             "resources": [
                 {

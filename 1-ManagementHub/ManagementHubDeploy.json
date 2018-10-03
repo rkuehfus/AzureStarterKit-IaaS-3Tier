@@ -14,6 +14,12 @@
                 "description": ""
             }
         },
+        "retentionPolicy": {
+           "type": "int",
+           "metadata": {
+                "description": ""
+            }
+        },
         "envPrefixName": {
             "type": "string",
             "metadata": {
@@ -107,6 +113,9 @@
                     },
                     "WorkspaceName": {
                         "value": "[variables('WorkspaceName')]"
+                    },
+                    "retentionPolicy": {
+                        "value": "[parameters('retentionPolicy')]"
                     }
                 }
             }
@@ -180,7 +189,7 @@
                         "category": "NetworkSecurityGroupEvent",
                         "enabled": true,
                         "retentionPolicy": {
-                            "days": 180,
+                            "days": "[parameters('retentionPolicy')]",
                             "enabled": true
                         }
                     },
@@ -188,7 +197,7 @@
                         "category": "NetworkSecurityGroupRuleCounter",
                         "enabled": true,
                         "retentionPolicy": {
-                            "days": 180,
+                            "days": "[parameters('retentionPolicy')]",
                             "enabled": true
                         }
                     }
@@ -238,6 +247,37 @@
             }
         },
         {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('ManHubvNet').inAzFWnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').inAzFWnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManHubvNet').outAzFWnsgName]",
@@ -280,6 +320,37 @@
             }
         },
         {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('ManHubvNet').outAzFWnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').outAzFWnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('ManHubvNet').commonnsgName]",
@@ -316,6 +387,37 @@
                             "access": "Deny",
                             "priority": 200,
                             "direction": "Outbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('ManHubvNet').commonnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').commonnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
                         }
                     }
                 ]
@@ -372,6 +474,37 @@
                             "access": "Deny",
                             "priority": 200,
                             "direction": "Outbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('ManHubvNet').helpernsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('ManHubvNet').helpernsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
                         }
                     }
                 ]
@@ -477,6 +610,18 @@
                     },
                     "ManHubResourceGroupName": {
                         "value": "[parameters('ManHubResourceGroupName')]"
+                    },
+                    "retentionPolicy": {
+                        "value": "[parameters('retentionPolicy')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "WorkspaceName":{
+                        "value": "[variables('WorkspaceName')]"
+                    },
+                    "ManCoreServicesResourceGroupName": {
+                        "value": "[parameters('ManCoreServicesResourceGroupName')]"
                     }
                 }
             }

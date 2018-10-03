@@ -18,6 +18,14 @@
             "minLength": 2,
             "maxLength": 5
         },
+        "retentionPolicy": {
+            "type": "int",
+            "defaultValue": 180,
+            "maxValue": 700,
+            "metadata": {
+                 "description": "Number of days to retain diagnostic logs, zero stores the logs indefinitely"
+             }
+         },
         "resourceGroupNames": {
             "type": "array",
             "defaultValue": [
@@ -116,6 +124,9 @@
                     },
                     "envPrefixName": {
                         "value": "[parameters('envPrefixName')]"
+                    },
+                    "retentionPolicy": {
+                        "value": "[parameters('retentionPolicy')]"
                     },
                     "WorkspaceLocation": {
                         "value": "[parameters('WorkspaceLocation')]"

@@ -33,6 +33,30 @@
             "metadata": {
                  "description": ""
              }
+         },
+         "retentionPolicy": {
+            "type": "int",
+            "metadata": {
+                 "description": ""
+             }
+         },
+         "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                 "description": ""
+             }
+         },
+         "WorkspaceName": {
+            "type": "string",
+            "metadata": {
+                 "description": ""
+             }
+         },
+         "ManCoreServicesResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                 "description": ""
+             }
          }
     },
     "variables": {
@@ -106,6 +130,37 @@
             }
         },
         {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('AppSpokevNet').WebnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('AppSpokevNet').WebnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',parameters('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('AppSpokevNet').AppnsgName]",
@@ -156,6 +211,37 @@
                             "access": "Deny",
                             "priority": 200,
                             "direction": "Outbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('AppSpokevNet').AppnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('AppSpokevNet').AppnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',parameters('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
                         }
                     }
                 ]
@@ -226,6 +312,37 @@
                             "access": "Deny",
                             "priority": 200,
                             "direction": "Outbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(variables('AppSpokevNet').DBnsgName, '/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('AppSpokevNet').DBnsgName)]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',parameters('WorkspaceName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                "logs": [
+                    {
+                        "category": "NetworkSecurityGroupEvent",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
+                        }
+                    },
+                    {
+                        "category": "NetworkSecurityGroupRuleCounter",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": "[parameters('retentionPolicy')]",
+                            "enabled": true
                         }
                     }
                 ]
