@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ManSecurityResourceGroupName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "SecurityKeyVaultName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "retentionPolicy": {
+           "type": "int",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "envPrefixName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        }
+    },
+    "variables": {
+        "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]",
+        "storageAccountName": "[concat('diaglogs',uniquestring(resourceGroup().id))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(parameters('SecurityKeyVaultName'),'/', 'Microsoft.Insights/setForSecurity')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
+            ],
+            "properties": {
+                "workspaceId": "[resourceId(parameters('ManSecurityResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
+                "storageAccountId": "[resourceId(parameters('ManSecurityResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "metrics": [
+                    {
+                        "category": "AllMetrics",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "enabled": true,
+                            "days": "[parameters('retentionPolicy')]"
+                        }
+                    }
+                ],
+                "logs": [
+                    {
+                        "category": "AuditEvent",
+                        "enabled": true
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}

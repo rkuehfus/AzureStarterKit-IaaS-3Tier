@@ -94,7 +94,8 @@
     "variables": {
         "ManHubResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[0])]",
         "ManCoreServicesResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[1])]",
-        "AppSpokeResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[3])]"
+        "AppSpokeResourceGroupName": "[concat(parameters('envPrefixName'),parameters('resourceGroupNames')[3])]",
+        "ManSecurityResourceGroupName": "[concat(parameters('envPrefixName'),'ManagementHubSecurity')]"
     },
     "resources": [
         {
@@ -152,6 +153,9 @@
                     },
                     "SecurityKeyVaultName": {
                         "value": "[parameters('SecurityKeyVaultName')]"
+                    },
+                    "ManSecurityResourceGroupName": {
+                        "value": "[variables('ManSecurityResourceGroupName')]"
                     }
                 }
             }

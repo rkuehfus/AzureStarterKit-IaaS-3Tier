@@ -100,8 +100,9 @@
             "location": "[resourceGroup().location]",
             "properties": {
                 "sku": {
-                    "name": "Standard"
-                }
+                    "name": "RS0",
+                    "tier": "Standard"
+                  }
             }
         },
           {
