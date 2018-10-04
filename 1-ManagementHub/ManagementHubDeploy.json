@@ -202,7 +202,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "KeyVaultLoggingDeployment",
-            "resourceGroup": "[parameters('ManCoreServicesResourceGroupName')]",
+            "resourceGroup": "[parameters('ManSecurityResourceGroupName')]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
             ],
@@ -219,8 +219,8 @@
                     "retentionPolicy": {
                         "value": "[parameters('retentionPolicy')]"
                     },
-                    "ManSecurityResourceGroupName": {
-                        "value": "[parameters('ManSecurityResourceGroupName')]"
+                    "ManCoreServicesResourceGroupName": {
+                        "value": "[parameters('ManCoreServicesResourceGroupName')]"
                     },
                     "SecurityKeyVaultName": {
                         "value": "[parameters('SecurityKeyVaultName')]"
