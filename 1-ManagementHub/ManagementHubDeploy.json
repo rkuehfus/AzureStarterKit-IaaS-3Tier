@@ -150,12 +150,45 @@
                     "envPrefixName": {
                         "value": "[parameters('envPrefixName')]"
                     },
-                    
                     "retentionPolicy": {
                         "value": "[parameters('retentionPolicy')]"
-                    }
-                    
-                   
+                    },
+                    "policyName": {
+                        "value": "WeeklyBackupPolicy1"
+                    },
+                    "scheduleRunDays": {
+                        "value": [ "Sunday", "Tuesday", "Thursday" ]
+                    },
+                    "scheduleRunTimes": {
+                        "value": [ "2016-09-21T05:30:00Z" ]
+                    },
+                    "timeZone": {
+                        "value": "UTC"
+                    },
+                    "weeklyRetentionDurationCount": {
+                        "value": 104
+                    },
+                    "daysOfTheWeekForMontlyRetention": {
+                        "value": [ "Sunday", "Tuesday" ]
+                    },
+                    "weeksOfTheMonthForMonthlyRetention": {
+                        "value": [ "First", "Third" ]
+                    },
+                    "monthlyRetentionDurationCount": {
+                        "value": 60
+                    },
+                    "monthsOfYear": {
+                        "value": [ "January", "March", "August" ]
+                    },
+                    "daysOfTheWeekForYearlyRetention": {
+                        "value": [ "Sunday", "Tuesday" ]
+                    },
+                    "weeksOfTheMonthForYearlyRetention": {
+                        "value": [ "First", "Third" ]
+                    },
+                    "yearlyRetentionDurationCount": {
+                        "value": 10
+                    } 
                 }
             }
         },
