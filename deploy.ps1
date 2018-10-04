@@ -1,7 +1,7 @@
 Connect-AzureRmAccount
 
 #Step 1: Create ResourceGroup after updating the location to one of your choice. Use get-AzureRmLocation to see a list
-$envPrefixName = 'demo7'
+$envPrefixName = 'demo8'
 $SecurityResourceGroupName = $envPrefixName + 'ManagementHubSecurity'
 New-AzureRMResourceGroup -Name $SecurityResourceGroupName -Location 'East US'
 $rg = get-AzureRmresourcegroup -Name $SecurityResourceGroupName

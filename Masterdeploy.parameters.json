@@ -2,16 +2,13 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "envPrefixName": {
-      "value": ""
-    },
     "username": {
       "value": "vmadmin"
     },
     "password": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/8b2ef784-0c0d-424c-8a7a-aa1304a0366a/resourceGroups/demo7ManagementHubSecurity/providers/Microsoft.KeyVault/vaults/demo7ManagementHubVault"
+          "id": "/subscriptions/8b2ef784-0c0d-424c-8a7a-aa1304a0366a/resourceGroups/demo8ManagementHubSecurity/providers/Microsoft.KeyVault/vaults/demo8ManagementHubVault"
         },
         "secretName": "VMPassword"
       }

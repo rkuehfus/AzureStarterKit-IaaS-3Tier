@@ -71,7 +71,7 @@
                 "description": "Storage Account type"
             }
         },
-        "SecurityKeyVaultNameName": {
+        "SecurityKeyVaultName": {
             "type": "string",
             "metadata": {
                 "description": "Name of key vault created in deployment script"
@@ -195,7 +195,7 @@
         {
             "type": "Microsoft.KeyVault/vaults/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
-            "name": "[concat(parameters('SecurityKeyVaultNameName'),'/', 'Microsoft.Insights/setForSecurity')]",
+            "name": "[concat(parameters('SecurityKeyVaultName'),'/', 'Microsoft.Insights/setForSecurity')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
