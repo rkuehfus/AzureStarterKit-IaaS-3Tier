@@ -18,7 +18,7 @@
             "minLength": 2,
             "maxLength": 5
         },
-        "SecurityKeyVaultNameName": {
+        "SecurityKeyVaultName": {
            "type": "string",
            "metadata": {
                 "description": "Name of key vault created in deployment script"
@@ -150,8 +150,8 @@
                     "WorkspaceLocation": {
                         "value": "[parameters('WorkspaceLocation')]"
                     },
-                    "SecurityKeyVaultNameName": {
-                        "value": "[parameters('SecurityKeyVaultNameName')]"
+                    "SecurityKeyVaultName": {
+                        "value": "[parameters('SecurityKeyVaultName')]"
                     }
                 }
             }
