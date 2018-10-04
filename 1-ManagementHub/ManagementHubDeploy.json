@@ -159,6 +159,9 @@
                     "retentionPolicy": {
                         "value": "[parameters('retentionPolicy')]"
                     },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
                     "policyName": {
                         "value": "WeeklyBackupPolicy1"
                     },

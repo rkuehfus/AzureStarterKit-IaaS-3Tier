@@ -85,12 +85,17 @@
             "metadata": {
               "description": "Number of years you want to retain the backup"
             }
+          },
+          "storageAccountName": {
+             "type": "string",
+             "metadata": {
+                  "description": ""
+              }
           }
     },
     "variables": {
         "vaultName": "[concat(parameters('envPrefixName'),'BackupVault')]",
-        "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]",
-        "storageAccountName": "[concat('diaglogs',uniquestring(resourceGroup().id))]"
+        "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]"
     },
     "resources": [
         {
@@ -114,7 +119,7 @@
             ],
             "properties": {
                 "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
                 "logs": [
                     {
                         "category": "AzureBackupReport",
