@@ -24,7 +24,7 @@ New-AzureRmDeployment `
   -Name $job `
   -Location eastus `
   -TemplateFile $template `
-  -TemplateParameterFile $parameterfile
+  -TemplateParameterFile $parameterfile `
   -envPrefixName $envPrefixName `
   -SecurityKeyVaultName $VaultName `
   -resourceGroupLocation eastus
