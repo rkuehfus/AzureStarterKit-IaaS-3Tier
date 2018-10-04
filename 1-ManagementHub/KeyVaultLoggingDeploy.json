@@ -60,7 +60,8 @@
                 "logs": [
                     {
                         "category": "AuditEvent",
-                        "enabled": true
+                        "enabled": true,
+                        "days": "[parameters('retentionPolicy')]"
                     }
                 ]
             }

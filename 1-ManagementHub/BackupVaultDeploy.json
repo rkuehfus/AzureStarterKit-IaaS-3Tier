@@ -98,12 +98,11 @@
             "apiVersion": "2016-06-01",
             "name": "[variables('vaultName')]",
             "location": "[resourceGroup().location]",
-            "properties": {
-                "sku": {
-                    "name": "RS0",
-                    "tier": "Standard"
-                  }
-            }
+            "sku": {
+                "name": "RS0",
+                "tier": "Standard"
+              },
+            "properties": {}
         },
           {
             "type": "Microsoft.RecoveryServices/vaults/providers/diagnosticSettings",
