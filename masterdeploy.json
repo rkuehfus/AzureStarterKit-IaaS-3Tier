@@ -18,6 +18,12 @@
             "minLength": 2,
             "maxLength": 5
         },
+        "SecurityKeyVaultNameName": {
+           "type": "string",
+           "metadata": {
+                "description": "Name of key vault created in deployment script"
+            }
+        },
         "retentionPolicy": {
             "type": "int",
             "defaultValue": 180,
@@ -143,6 +149,9 @@
                     },
                     "WorkspaceLocation": {
                         "value": "[parameters('WorkspaceLocation')]"
+                    },
+                    "SecurityKeyVaultNameName": {
+                        "value": "[parameters('SecurityKeyVaultNameName')]"
                     }
                 }
             }
