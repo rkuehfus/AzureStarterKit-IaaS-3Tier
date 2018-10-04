@@ -224,6 +224,9 @@
                     },
                     "SecurityKeyVaultName": {
                         "value": "[parameters('SecurityKeyVaultName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
                     }
                 }
             }

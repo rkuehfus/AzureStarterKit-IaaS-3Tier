@@ -25,11 +25,17 @@
            "metadata": {
                 "description": ""
             }
+        },
+        "storageAccountName": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
         }
     },
     "variables": {
-        "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]",
-        "storageAccountName": "[concat('diaglogs',uniquestring(resourceGroup().id))]"
+        "WorkspaceName": "[concat(parameters('envPrefixName'),'LogAnalytics')]"
+        
     },
     "resources": [
         {
@@ -37,12 +43,10 @@
             "apiVersion": "2017-05-01-preview",
             "name": "[concat(parameters('SecurityKeyVaultName'),'/', 'Microsoft.Insights/setForSecurity')]",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Resources/deployments/', 'LogAnalyticsDeployment')]"
-            ],
+            "dependsOn": [],
             "properties": {
                 "workspaceId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.OperationalInsights/workspaces',variables('WorkspaceName'))]",
-                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "storageAccountId": "[resourceId(parameters('ManCoreServicesResourceGroupName'),'Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
                 "metrics": [
                     {
                         "category": "AllMetrics",
